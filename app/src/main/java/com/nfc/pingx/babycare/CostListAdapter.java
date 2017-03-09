@@ -1,6 +1,8 @@
 package com.nfc.pingx.babycare;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,53 +17,51 @@ import java.util.List;
  * Created by chenp_fjnu on 2017/3/5.
  */
 
-public class CostListAdapter extends BaseAdapter {
-    private List<CostBean> mList;
-    private  Context mContext;
-    private LayoutInflater mLayoutInflater;
-    public CostListAdapter(Context context, List<CostBean> list){
-        mContext = context;
+public class CostListAdapter extends Adapter<CostListAdapter.CostViewHolder> {
+    public List<CostBean> mList;
+    public CostListAdapter(List<CostBean> list){
         mList = list;
-        mLayoutInflater = LayoutInflater.from(context);
+    }
+
+    @Override
+    public CostViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
+        return new CostViewHolder(itemView);
+    }
+
+    @Override
+    public void onBindViewHolder(CostViewHolder holder, int position) {
+        CostBean model = mList.get(position);
+        holder.mTvCostTitle.setText(model.costTitle);
+        holder.mTvCostDate.setText(model.costDate);
+        holder.mTvCostMoney.setText(model.costMoney);
     }
     @Override
-    public int getCount() {
+    public int getItemCount() {
         return mList.size();
     }
-
-    @Override
-    public Object getItem(int position) {
-        return mList.get(position);
+    public List<CostBean> getList() {
+        return this.mList;
     }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
+    public void addItem(CostBean content, int position) {
+        mList.add(position, content);
+        notifyItemInserted(position);
     }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
-        if(convertView ==null){
-            viewHolder = new ViewHolder();
-            convertView = mLayoutInflater.inflate(R.layout.list_item, null);
-            viewHolder.mTvCostTitle = (TextView) convertView.findViewById(R.id.tv_title);
-            viewHolder.mTvCostDate = (TextView) convertView.findViewById(R.id.tv_date);
-            viewHolder.mTvCostMoney = (TextView) convertView.findViewById(R.id.tv_cost);
-            convertView.setTag(viewHolder);
-        }else {
-            viewHolder= (ViewHolder) convertView.getTag();
-        }
-        CostBean bean=mList.get(position);
-        viewHolder.mTvCostTitle.setText(bean.costTitle);
-        viewHolder.mTvCostDate.setText(bean.costDate);
-        viewHolder.mTvCostMoney.setText(bean.costMoney);
-        return convertView;
+    public void removeItem(CostBean model) {
+        int position = mList.indexOf(model);
+        mList.remove(position);
+        notifyItemRemoved(position);
     }
-
-    private static class ViewHolder{
+    public  class CostViewHolder extends RecyclerView.ViewHolder{
         public TextView mTvCostTitle;
         public TextView mTvCostDate;
         public TextView mTvCostMoney;
+
+        public CostViewHolder(View itemView) {
+            super(itemView);
+            mTvCostTitle = (TextView) itemView.findViewById(R.id.tv_title);
+            mTvCostDate = (TextView) itemView.findViewById(R.id.tv_date);
+            mTvCostMoney = (TextView) itemView.findViewById(R.id.tv_cost);
+        }
     }
 }

@@ -5,8 +5,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +20,12 @@ import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.R.attr.id;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,10 +42,51 @@ public class MainActivity extends AppCompatActivity {
 
         costBeanList =new ArrayList<>();
         databaseHelper =new DatabaseHelper(this);
-        ListView costList= (ListView) findViewById(R.id.lv_main);
+        final RecyclerView costList= (RecyclerView) findViewById(R.id.lv_main);
         initCostData();
-        adapter = new CostListAdapter(this, costBeanList);
+        adapter = new CostListAdapter(costBeanList);
         costList.setAdapter(adapter);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager.scrollToPosition(0);
+        costList.setLayoutManager(layoutManager);
+        // allows for optimizations if all item views are of the same size:
+        costList.setHasFixedSize(true);
+        RecyclerView.ItemDecoration itemDecoration =
+                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        costList.addItemDecoration(itemDecoration);
+        // this is the default;this call is actually only necessary with custom ItemAnimators
+        costList.setItemAnimator(new DefaultItemAnimator());
+        // onClickDetection is done in this Activity’s OnItemTouchListener
+        // with the help of a GestureDetector;
+        // Tip by Ian Lake on G+ in a comment to this post:
+        // https://plus.google.com/+LucasRocha/posts/37U8GWtYxDE
+//        costList.addOnItemTouchListener(this);
+//        gesturedetector = new GestureDetectorCompat(this, new RecyclerViewDemoOnGestureListener());
+        SwipeDismissRecyclerViewTouchListener listener = new SwipeDismissRecyclerViewTouchListener.Builder(
+                costList,
+                new SwipeDismissRecyclerViewTouchListener.DismissCallbacks() {
+                    @Override
+                    public boolean canDismiss(int position) {
+                        return true;
+                    }
+
+                    @Override
+                    public void onDismiss(View view) {
+                        CostBean costBean = ((CostListAdapter)costList.getAdapter()).getList().get(costList.getChildAdapterPosition(view));
+                        databaseHelper.deleteItem(costBean);
+                        costBeanList.remove(costBean);
+                        adapter.notifyDataSetChanged();
+
+                        Toast.makeText(getBaseContext(), String.format("Delete item %d",costBean.id),Toast.LENGTH_LONG).show();
+                    }
+                })
+                .setIsVertical(false)
+                .create();
+
+        costList.setOnTouchListener(listener);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
                         costBean.costTitle = title.getText().toString();
                         costBean.costMoney = money.getText().toString();
                         costBean.costDate = date.getYear() +"-"+(date.getMonth()+1)+"-"+date.getDayOfMonth();
-                        databaseHelper.insertCost(costBean);
+                        long insertedId= databaseHelper.insertCost(costBean);
+                        costBean.id=insertedId;
                         costBeanList.add(costBean);
                         adapter.notifyDataSetChanged();
                     }
