@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.R.attr.id;
+import static com.nfc.pingx.babycare.Constants.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,30 +43,30 @@ public class MainActivity extends AppCompatActivity {
 
         costBeanList =new ArrayList<>();
         databaseHelper =new DatabaseHelper(this);
-        final RecyclerView costList= (RecyclerView) findViewById(R.id.lv_main);
+        final RecyclerView costListView= (RecyclerView) findViewById(R.id.lv_main);
         initCostData();
         adapter = new CostListAdapter(costBeanList);
-        costList.setAdapter(adapter);
+        costListView.setAdapter(adapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         layoutManager.scrollToPosition(0);
-        costList.setLayoutManager(layoutManager);
+        costListView.setLayoutManager(layoutManager);
         // allows for optimizations if all item views are of the same size:
-        costList.setHasFixedSize(true);
+        costListView.setHasFixedSize(true);
         RecyclerView.ItemDecoration itemDecoration =
                 new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
-        costList.addItemDecoration(itemDecoration);
+        costListView.addItemDecoration(itemDecoration);
         // this is the default;this call is actually only necessary with custom ItemAnimators
-        costList.setItemAnimator(new DefaultItemAnimator());
+        costListView.setItemAnimator(new DefaultItemAnimator());
         // onClickDetection is done in this Activity’s OnItemTouchListener
         // with the help of a GestureDetector;
         // Tip by Ian Lake on G+ in a comment to this post:
         // https://plus.google.com/+LucasRocha/posts/37U8GWtYxDE
-//        costList.addOnItemTouchListener(this);
+//        costListView.addOnItemTouchListener(this);
 //        gesturedetector = new GestureDetectorCompat(this, new RecyclerViewDemoOnGestureListener());
         SwipeDismissRecyclerViewTouchListener listener = new SwipeDismissRecyclerViewTouchListener.Builder(
-                costList,
+                costListView,
                 new SwipeDismissRecyclerViewTouchListener.DismissCallbacks() {
                     @Override
                     public boolean canDismiss(int position) {
@@ -74,18 +75,16 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onDismiss(View view) {
-                        CostBean costBean = ((CostListAdapter)costList.getAdapter()).getList().get(costList.getChildAdapterPosition(view));
+                        CostBean costBean = ((CostListAdapter)costListView.getAdapter()).getList().get(costListView.getChildAdapterPosition(view));
                         databaseHelper.deleteItem(costBean);
                         costBeanList.remove(costBean);
-                        adapter.notifyDataSetChanged();
-
+                        costListView.getAdapter().notifyDataSetChanged();
                         Toast.makeText(getBaseContext(), String.format("Delete item %d",costBean.id),Toast.LENGTH_LONG).show();
                     }
                 })
-                .setIsVertical(false)
                 .create();
 
-        costList.setOnTouchListener(listener);
+        costListView.setOnTouchListener(listener);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -109,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                         long insertedId= databaseHelper.insertCost(costBean);
                         costBean.id=insertedId;
                         costBeanList.add(costBean);
-                        adapter.notifyDataSetChanged();
+                        costListView.getAdapter().notifyDataSetChanged();
                     }
                 });
                 builder.setNegativeButton("Cancel", null);
@@ -124,9 +123,10 @@ public class MainActivity extends AppCompatActivity {
         if(cursor!=null){
             while(cursor.moveToNext()){
                 CostBean costBean=new CostBean();
-                costBean.costTitle=cursor.getString(cursor.getColumnIndex("cost_title"));
-                costBean.costDate=cursor.getString(cursor.getColumnIndex("cost_date"));
-                costBean.costMoney=cursor.getString(cursor.getColumnIndex("cost_money"));
+                costBean.id=cursor.getInt(cursor.getColumnIndex(COST_ID));
+                costBean.costTitle=cursor.getString(cursor.getColumnIndex(COST_TITLE));
+                costBean.costDate=cursor.getString(cursor.getColumnIndex(COST_DATE));
+                costBean.costMoney=cursor.getString(cursor.getColumnIndex(COST_MONEY));
                 costBeanList.add(costBean);
             }
             cursor.close();

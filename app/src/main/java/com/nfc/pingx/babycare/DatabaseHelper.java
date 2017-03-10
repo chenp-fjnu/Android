@@ -7,16 +7,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.ContactsContract;
 
+import static com.nfc.pingx.babycare.Constants.*;
+
+
 /**
  * Created by chenp_fjnu on 2017/3/5.
  */
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    public static final String COST_TITLE = "cost_title";
-    public static final String BABY_CARE = "baby_care";
-    public static final String COST_DATE = "cost_date";
-    public static final String COST_MONEY = "cost_money";
+
 
     public DatabaseHelper(Context context){
         super(context, BABY_CARE,null,1);
@@ -24,10 +24,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table if not exists "+ BABY_CARE +"(" +
-                        "id integer primary key," +
-                        COST_TITLE +" varchar," +
-                        COST_DATE + " varchar," +
-                        COST_MONEY+ " varchar)");
+                COST_ID + " integer primary key," +
+                COST_TITLE +" varchar," +
+                COST_DATE + " varchar," +
+                COST_MONEY+ " varchar)");
     }
     public  long insertCost(CostBean costBean){
         SQLiteDatabase database = getWritableDatabase();
@@ -44,12 +44,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteItem(CostBean costBean){
         SQLiteDatabase database = getWritableDatabase();
         if(costBean.id!=0) {
-            database.delete(BABY_CARE, "id = ?", new String[]{Long.toString(costBean.id)});
+            database.delete(BABY_CARE, COST_ID+" = ?", new String[]{Long.toString(costBean.id)});
         }
     }
     public Cursor getAllCostData(){
         SQLiteDatabase database = getWritableDatabase();
-        return database.query(BABY_CARE,null, null,null,null,null, COST_DATE +" DESC");
+        return database.query(BABY_CARE,null, null,null,null,null, COST_DATE +" "+DESC);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
