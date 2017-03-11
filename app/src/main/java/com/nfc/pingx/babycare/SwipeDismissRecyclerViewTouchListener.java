@@ -116,7 +116,7 @@ public class SwipeDismissRecyclerViewTouchListener implements View.OnTouchListen
                     mDownX = motionEvent.getRawX();
                     mDownY = motionEvent.getRawY();
 
-                    mDownPosition = mRecyclerView.getChildPosition(mDownView);
+                    mDownPosition = mRecyclerView.getChildLayoutPosition(mDownView);
                     if (mCallbacks.canDismiss(mDownPosition)) {
                         mVelocityTracker = VelocityTracker.obtain();
                         mVelocityTracker.addMovement(motionEvent);
@@ -162,15 +162,16 @@ public class SwipeDismissRecyclerViewTouchListener implements View.OnTouchListen
 
             case MotionEvent.ACTION_UP: {
                 long pressDuration = System.currentTimeMillis() - pressStartTime;
-                if (pressDuration < MAX_CLICK_DURATION && distance(pressedX, pressedY, motionEvent.getX(), motionEvent.getY()) < mSlop) {
-                    mItemClickCallback.onClick(mRecyclerView.getChildPosition(mDownView));
+                if (pressDuration < MAX_CLICK_DURATION && distance(pressedX, pressedY, motionEvent.getX(), motionEvent.getY()) < mSlop
+                        && mItemClickCallback!=null) {
+                    mItemClickCallback.onClick(mRecyclerView.getChildLayoutPosition(mDownView));
                     return true;
                 }
 
                 updateItemBackground(mDownView, motionEvent);
 
                 if (!mSwiping && mDownView != null && mItemTouchCallback != null) {
-                    mItemTouchCallback.onTouch(mRecyclerView.getChildPosition(mDownView));
+                    mItemTouchCallback.onTouch(mRecyclerView.getChildLayoutPosition(mDownView));
                     mVelocityTracker.recycle();
                     mVelocityTracker = null;
                     mDownX = 0;

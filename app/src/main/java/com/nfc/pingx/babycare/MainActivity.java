@@ -2,10 +2,8 @@ package com.nfc.pingx.babycare;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,19 +17,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
+import com.nfc.ping.common.DAO.CostDAO;
+import com.nfc.ping.common.db.SQLiteHelper;
+import com.nfc.ping.common.model.Cost;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.R.attr.id;
-import static com.nfc.pingx.babycare.Constants.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<CostBean> costBeanList;
-    private DatabaseHelper databaseHelper;
+    private List<Cost> costList;
+    private CostDAO costDAO;
     private CostListAdapter adapter;
 
     @Override
@@ -41,11 +41,13 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        costBeanList =new ArrayList<>();
-        databaseHelper =new DatabaseHelper(this);
-        final RecyclerView costListView= (RecyclerView) findViewById(R.id.lv_main);
+        costList =new ArrayList<>();
+        costDAO=new CostDAO(this);
         initCostData();
-        adapter = new CostListAdapter(costBeanList);
+
+        //region RecyclerView setup
+        final RecyclerView costListView= (RecyclerView) findViewById(R.id.lv_main);
+        adapter = new CostListAdapter(costList);
         costListView.setAdapter(adapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -60,11 +62,6 @@ public class MainActivity extends AppCompatActivity {
         // this is the default;this call is actually only necessary with custom ItemAnimators
         costListView.setItemAnimator(new DefaultItemAnimator());
         // onClickDetection is done in this Activity’s OnItemTouchListener
-        // with the help of a GestureDetector;
-        // Tip by Ian Lake on G+ in a comment to this post:
-        // https://plus.google.com/+LucasRocha/posts/37U8GWtYxDE
-//        costListView.addOnItemTouchListener(this);
-//        gesturedetector = new GestureDetectorCompat(this, new RecyclerViewDemoOnGestureListener());
         SwipeDismissRecyclerViewTouchListener listener = new SwipeDismissRecyclerViewTouchListener.Builder(
                 costListView,
                 new SwipeDismissRecyclerViewTouchListener.DismissCallbacks() {
@@ -75,17 +72,19 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onDismiss(View view) {
-                        CostBean costBean = ((CostListAdapter)costListView.getAdapter()).getList().get(costListView.getChildAdapterPosition(view));
-                        databaseHelper.deleteItem(costBean);
-                        costBeanList.remove(costBean);
+                        Cost cost = ((CostListAdapter)costListView.getAdapter()).getList().get(costListView.getChildAdapterPosition(view));
+                        costDAO.delete(cost);
+                        costList.remove(cost);
                         costListView.getAdapter().notifyDataSetChanged();
-                        Toast.makeText(getBaseContext(), String.format("Delete item %d",costBean.id),Toast.LENGTH_LONG).show();
+                        Toast.makeText(getBaseContext(), String.format("Delete item %d",cost.id),Toast.LENGTH_LONG).show();
                     }
                 })
                 .create();
 
         costListView.setOnTouchListener(listener);
+        //endregion
 
+        //region FloatingActionButton
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,13 +100,12 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        CostBean costBean =new CostBean();
-                        costBean.costTitle = title.getText().toString();
-                        costBean.costMoney = money.getText().toString();
-                        costBean.costDate = date.getYear() +"-"+(date.getMonth()+1)+"-"+date.getDayOfMonth();
-                        long insertedId= databaseHelper.insertCost(costBean);
-                        costBean.id=insertedId;
-                        costBeanList.add(costBean);
+                        Cost cost =new Cost();
+                        cost.costTitle = title.getText().toString();
+                        cost.costMoney = money.getText().toString();
+                        cost.costDate = date.getYear() +"-"+(date.getMonth()+1)+"-"+date.getDayOfMonth();
+                        costDAO.create(cost);
+                        costList.add(cost);
                         costListView.getAdapter().notifyDataSetChanged();
                     }
                 });
@@ -116,21 +114,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        //endregion
+
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(this));
     }
 
     private void initCostData() {
-        Cursor cursor = databaseHelper.getAllCostData();
-        if(cursor!=null){
-            while(cursor.moveToNext()){
-                CostBean costBean=new CostBean();
-                costBean.id=cursor.getInt(cursor.getColumnIndex(COST_ID));
-                costBean.costTitle=cursor.getString(cursor.getColumnIndex(COST_TITLE));
-                costBean.costDate=cursor.getString(cursor.getColumnIndex(COST_DATE));
-                costBean.costMoney=cursor.getString(cursor.getColumnIndex(COST_MONEY));
-                costBeanList.add(costBean);
-            }
-            cursor.close();
-        }
+        costList = costDAO.getAll();
     }
 
     @Override
@@ -147,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, ChartActivity.class);
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }

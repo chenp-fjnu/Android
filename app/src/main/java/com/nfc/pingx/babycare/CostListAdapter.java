@@ -9,8 +9,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.nfc.ping.common.model.Cost;
+
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,8 +21,8 @@ import java.util.List;
  */
 
 public class CostListAdapter extends Adapter<CostListAdapter.CostViewHolder> {
-    public List<CostBean> mList;
-    public CostListAdapter(List<CostBean> list){
+    public List<Cost> mList = new ArrayList<>();
+    public CostListAdapter(List<Cost> list){
         mList = list;
     }
 
@@ -31,7 +34,7 @@ public class CostListAdapter extends Adapter<CostListAdapter.CostViewHolder> {
 
     @Override
     public void onBindViewHolder(CostViewHolder holder, int position) {
-        CostBean model = mList.get(position);
+        Cost model = mList.get(position);
         holder.mTvCostTitle.setText(model.costTitle);
         holder.mTvCostDate.setText(model.costDate);
         holder.mTvCostMoney.setText(model.costMoney);
@@ -40,14 +43,14 @@ public class CostListAdapter extends Adapter<CostListAdapter.CostViewHolder> {
     public int getItemCount() {
         return mList.size();
     }
-    public List<CostBean> getList() {
+    public List<Cost> getList() {
         return this.mList;
     }
-    public void addItem(CostBean content, int position) {
+    public void addItem(Cost content, int position) {
         mList.add(position, content);
         notifyItemInserted(position);
     }
-    public void removeItem(CostBean model) {
+    public void removeItem(Cost model) {
         int position = mList.indexOf(model);
         mList.remove(position);
         notifyItemRemoved(position);
