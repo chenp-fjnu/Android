@@ -130,11 +130,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_charts) {
-            Intent intent = new Intent(MainActivity.this, ChartActivity.class);
-            return true;
+
+        switch (item.getItemId()) {
+            case R.id.action_charts:
+                Intent intent = new Intent(this, ChartActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.action_exit:
+                finish();
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 }
