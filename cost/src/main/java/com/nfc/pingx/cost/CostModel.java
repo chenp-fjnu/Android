@@ -1,12 +1,14 @@
-package com.nfc.ping.common.model;
+package com.nfc.pingx.cost;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
+import com.nfc.pingx.common.model.IModel;
+
 /**
  * Created by chenp_fjnu on 2017/3/11.
  */
 @DatabaseTable(tableName = "tb_cost")
-public class Cost implements IModel {
+public class CostModel implements IModel {
     @DatabaseField(generatedId = true)
     public int id;
     @DatabaseField
@@ -15,7 +17,7 @@ public class Cost implements IModel {
     public String costDate;
     @DatabaseField
     public String costMoney;
-    public Cost()
+    public CostModel()
     {
     }
 
@@ -59,7 +61,7 @@ public class Cost implements IModel {
     @Override
     public String toString()
     {
-        return "Cost [id=" + id + ", title=" + costTitle + ", date=" + costDate+ ", money=" + costMoney
+        return "CostModel [id=" + id + ", title=" + costTitle + ", date=" + costDate+ ", money=" + costMoney
                 + "]";
     }
 }

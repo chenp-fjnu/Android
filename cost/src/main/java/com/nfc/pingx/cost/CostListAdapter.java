@@ -1,17 +1,11 @@
-package com.nfc.pingx.babycare;
+package com.nfc.pingx.cost;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
-
-import com.nfc.ping.common.model.Cost;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +15,8 @@ import java.util.List;
  */
 
 public class CostListAdapter extends Adapter<CostListAdapter.CostViewHolder> {
-    public List<Cost> mList = new ArrayList<>();
-    public CostListAdapter(List<Cost> list){
+    public List<CostModel> mList = new ArrayList<>();
+    public CostListAdapter(List<CostModel> list){
         mList = list;
     }
 
@@ -34,7 +28,7 @@ public class CostListAdapter extends Adapter<CostListAdapter.CostViewHolder> {
 
     @Override
     public void onBindViewHolder(CostViewHolder holder, int position) {
-        Cost model = mList.get(position);
+        CostModel model = mList.get(position);
         holder.mTvCostTitle.setText(model.costTitle);
         holder.mTvCostDate.setText(model.costDate);
         holder.mTvCostMoney.setText(model.costMoney);
@@ -43,14 +37,14 @@ public class CostListAdapter extends Adapter<CostListAdapter.CostViewHolder> {
     public int getItemCount() {
         return mList.size();
     }
-    public List<Cost> getList() {
+    public List<CostModel> getList() {
         return this.mList;
     }
-    public void addItem(Cost content, int position) {
+    public void addItem(CostModel content, int position) {
         mList.add(position, content);
         notifyItemInserted(position);
     }
-    public void removeItem(Cost model) {
+    public void removeItem(CostModel model) {
         int position = mList.indexOf(model);
         mList.remove(position);
         notifyItemRemoved(position);

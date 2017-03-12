@@ -1,11 +1,10 @@
-package com.nfc.ping.common.DAO;
+package com.nfc.pingx.cost;
 
 import android.content.Context;
 
 import com.j256.ormlite.dao.Dao;
-import com.nfc.ping.common.db.SQLiteHelper;
-import com.nfc.ping.common.model.Cost;
-import com.nfc.ping.common.model.User;
+import com.nfc.pingx.common.DAO.IDAO;
+import com.nfc.pingx.common.db.SQLiteHelper;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.List;
 
 public class CostDAO implements IDAO {
     private Context context;
-    private Dao<Cost, Integer> daoOpe;
+    private Dao<CostModel, Integer> daoOpe;
     private SQLiteHelper helper;
 
     public CostDAO(Context context)
@@ -24,8 +23,8 @@ public class CostDAO implements IDAO {
         this.context = context;
         try
         {
-            helper = SQLiteHelper.getHelper(context);
-            daoOpe = helper.getDao(Cost.class);
+            helper = CostSQLiteHelper.getHelper(context);
+            daoOpe = helper.getDao(CostModel.class);
         } catch (SQLException e)
         {
             e.printStackTrace();
@@ -35,30 +34,30 @@ public class CostDAO implements IDAO {
     /**
      * 增加一个CostItem
      *
-     * @param cost
+     * @param costModel
      * @throws SQLException
      */
-    public void create(Cost cost)
+    public void create(CostModel costModel)
     {
         try
         {
-            daoOpe.create(cost);
+            daoOpe.create(costModel);
         } catch (SQLException e)
         {
             e.printStackTrace();
         }
     }
 
-    public void delete(Cost cost){
+    public void delete(CostModel costModel){
         try
         {
-            daoOpe.delete(cost);
+            daoOpe.delete(costModel);
         } catch (SQLException e)
         {
             e.printStackTrace();
         }
     }
-    public Cost get(int id)
+    public CostModel get(int id)
     {
         try
         {
@@ -74,7 +73,7 @@ public class CostDAO implements IDAO {
      *
      * @return
      */
-    public List<Cost> getAll()
+    public List<CostModel> getAll()
     {
         try
         {
