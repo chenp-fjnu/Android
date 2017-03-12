@@ -1,1 +1,1 @@
-include ':app', ':demomodule', ':common'
+include ':app', ':demomodule', ':common', ':cost', ':easy'

@@ -5,7 +5,9 @@
       <module fileurl="file://$PROJECT_DIR$/Babycare.iml" filepath="$PROJECT_DIR$/Babycare.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cost/cost.iml" filepath="$PROJECT_DIR$/cost/cost.iml" />
       <module fileurl="file://$PROJECT_DIR$/demomodule/demomodule.iml" filepath="$PROJECT_DIR$/demomodule/demomodule.iml" />
+      <module fileurl="file://$PROJECT_DIR$/EASY/easy.iml" filepath="$PROJECT_DIR$/EASY/easy.iml" />
     </modules>
   </component>
 </project>

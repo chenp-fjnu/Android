@@ -1,4 +1,4 @@
-package com.nfc.pingx.babycare;
+package com.nfc.pingx.easy;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_charts) {
+        if (id == R.id.action_settings) {
             return true;
         }
 
