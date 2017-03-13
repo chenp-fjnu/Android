@@ -2,6 +2,8 @@ package com.nfc.pingx.cost;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
+import android.databinding.ViewDataBinding;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 
 import com.nfc.pingx.common.ExceptionHandler;
 import com.nfc.pingx.common.SwipeDismissRecyclerViewTouchListener;
+import com.nfc.pingx.cost.databinding.ActivityMainBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +31,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<CostModel> costModelList;
+    private List<CostModel> costModelList = new ArrayList<>();
     private CostDAO costDAO;
     private CostListAdapter adapter;
 
@@ -38,11 +41,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        costModelList =new ArrayList<>();
         costDAO=new CostDAO(this);
         initCostData();
-
         //region RecyclerView setup
         final RecyclerView costListView= (RecyclerView) findViewById(R.id.lv_main);
         adapter = new CostListAdapter(costModelList);
@@ -59,6 +59,13 @@ public class MainActivity extends AppCompatActivity {
         costListView.addItemDecoration(itemDecoration);
         // this is the default;this call is actually only necessary with custom ItemAnimators
         costListView.setItemAnimator(new DefaultItemAnimator());
+        // allows for optimizations if all item views are of the same size:
+//        costListView.setHasFixedSize(true);
+//        RecyclerView.ItemDecoration itemDecoration =
+//                new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+//        costListView.addItemDecoration(itemDecoration);
+//        // this is the default;this call is actually only necessary with custom ItemAnimators
+//        costListView.setItemAnimator(new DefaultItemAnimator());
         // onClickDetection is done in this Activity’s OnItemTouchListener
         SwipeDismissRecyclerViewTouchListener listener = new SwipeDismissRecyclerViewTouchListener.Builder(
                 costListView,
@@ -70,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public void onDismiss(View view) {
-                        CostModel costModel = ((CostListAdapter)costListView.getAdapter()).getList().get(costListView.getChildAdapterPosition(view));
+                        CostModel costModel = ((CostListAdapter)costListView.getAdapter()).get(costListView.getChildAdapterPosition(view));
                         costDAO.delete(costModel);
                         costModelList.remove(costModel);
                         costListView.getAdapter().notifyDataSetChanged();

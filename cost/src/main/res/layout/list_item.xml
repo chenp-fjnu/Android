@@ -1,35 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="costModel" type="com.nfc.pingx.cost.CostModel"></variable>
+    </data>
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="80dp"
     android:orientation="horizontal">
-
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="150dp"
-        android:layout_height="80dp"
-        android:layout_marginLeft="10dp"
-        android:maxLines="1"
-        android:textSize="35sp"
-        android:gravity="center"
-        android:ellipsize="marquee"
-        android:text="{model.costTitle}"/>
-    <TextView
-        android:id="@+id/tv_date"
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:layout_marginLeft="15dp"
-        android:maxLines="1"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:text="{model.costDate}"/>
-    <TextView
-        android:id="@+id/tv_cost"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginLeft="15dp"
-        android:maxLines="1"
-        android:textSize="30sp"
-        android:gravity="center|right"
-        android:text="{model.costMoney}"/>
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_marginLeft="10dp"
+            android:maxLines="1"
+            android:textSize="35sp"
+            android:gravity="center"
+            android:ellipsize="marquee"
+            android:text="@{costModel.costTitle}"/>
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="80dp"
+            android:layout_marginLeft="15dp"
+            android:maxLines="1"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:text="@{costModel.costDate}"/>
+        <TextView
+            android:id="@+id/tv_cost"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="15dp"
+            android:maxLines="1"
+            android:textSize="30sp"
+            android:gravity="center|right"
+            android:text="@{costModel.costMoney}"/>
+    </LinearLayout>
+    </layout>

@@ -1,5 +1,8 @@
 # UI
-* Recycleview: https://www.grokkingandroid.com/first-glance-androids-recyclerview/
+* Recycleview: 
+  * https://www.grokkingandroid.com/first-glance-androids-recyclerview/
+  * https://github.com/codepath/android_guides/wiki/Using-the-RecyclerView
+
 # Feature
 * Databinding:
   * https://developer.android.com/tools/data-binding/guide.html
