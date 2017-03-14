@@ -4,10 +4,18 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Babycare.iml" filepath="$PROJECT_DIR$/Babycare.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bottomnavigationdemo/bottomnavigationdemo.iml" filepath="$PROJECT_DIR$/bottomnavigationdemo/bottomnavigationdemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/common/common.iml" filepath="$PROJECT_DIR$/common/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/cost/cost.iml" filepath="$PROJECT_DIR$/cost/cost.iml" />
       <module fileurl="file://$PROJECT_DIR$/demomodule/demomodule.iml" filepath="$PROJECT_DIR$/demomodule/demomodule.iml" />
       <module fileurl="file://$PROJECT_DIR$/EASY/easy.iml" filepath="$PROJECT_DIR$/EASY/easy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fullscreendemo/fullscreendemo.iml" filepath="$PROJECT_DIR$/fullscreendemo/fullscreendemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/logindemo/logindemo.iml" filepath="$PROJECT_DIR$/logindemo/logindemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/masterdetaildemo/masterdetaildemo.iml" filepath="$PROJECT_DIR$/masterdetaildemo/masterdetaildemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/navigationdrawerdemo/navigationdrawerdemo.iml" filepath="$PROJECT_DIR$/navigationdrawerdemo/navigationdrawerdemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/scrollingdemo/scrollingdemo.iml" filepath="$PROJECT_DIR$/scrollingdemo/scrollingdemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/settingdemo/settingdemo.iml" filepath="$PROJECT_DIR$/settingdemo/settingdemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tabbeddemo/tabbeddemo.iml" filepath="$PROJECT_DIR$/tabbeddemo/tabbeddemo.iml" />
     </modules>
   </component>
 </project>

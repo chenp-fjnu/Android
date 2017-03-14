@@ -1,1 +1,1 @@
-include ':app', ':demomodule', ':common', ':cost', ':easy'
+include ':app', ':demomodule', ':common', ':cost', ':easy', ':bottomnavigationdemo', ':fullscreendemo', ':logindemo', ':masterdetaildemo', ':navigationdrawerdemo', ':scrollingdemo', ':settingdemo', ':tabbeddemo'

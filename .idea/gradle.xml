@@ -11,9 +11,17 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/EASY" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/bottomnavigationdemo" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/cost" />
             <option value="$PROJECT_DIR$/demomodule" />
+            <option value="$PROJECT_DIR$/fullscreendemo" />
+            <option value="$PROJECT_DIR$/logindemo" />
+            <option value="$PROJECT_DIR$/masterdetaildemo" />
+            <option value="$PROJECT_DIR$/navigationdrawerdemo" />
+            <option value="$PROJECT_DIR$/scrollingdemo" />
+            <option value="$PROJECT_DIR$/settingdemo" />
+            <option value="$PROJECT_DIR$/tabbeddemo" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
